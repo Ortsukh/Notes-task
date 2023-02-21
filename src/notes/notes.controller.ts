@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { ChangeOrderDto } from './dto/change-order.dto';
 
 @Controller('notes')
 export class NotesController {
@@ -17,18 +28,37 @@ export class NotesController {
     return this.notesService.findAll();
   }
 
-  @Get(':id')
+  @Get('/tags')
+  findByTags(@Query() { tags }: { tags: string }) {
+    return this.notesService.findByTags(tags);
+  }
+
+  @Get('/all-tags')
+  findAllTags() {
+    return this.notesService.findAllTags();
+  }
+
+  @Get('/:id')
   findOne(@Param('id') id: string) {
-    return this.notesService.findOne(+id);
+    return this.notesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put('/order')
+  updateOrder(@Body() updateNoteDto: ChangeOrderDto) {
+    console.log(updateNoteDto);
+
+    return this.notesService.updateOrder(updateNoteDto);
+  }
+
+  @Put('/:id')
   update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.notesService.update(+id, updateNoteDto);
+    console.log('updateNoteDto', updateNoteDto);
+
+    return this.notesService.update(id, updateNoteDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.notesService.remove(+id);
+    return this.notesService.remove(id);
   }
 }
