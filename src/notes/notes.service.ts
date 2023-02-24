@@ -23,10 +23,15 @@ export class NotesService {
   }
 
   async findAll() {
+    const take = 5;
+    const page = 1;
+    const skip = (page - 1) * take;
     const notes = await this.notesRepository.find({
       order: {
         order: 'ASC',
       },
+      take: take,
+      skip: skip,
     });
 
     return notes;
@@ -40,7 +45,13 @@ export class NotesService {
       .getRawMany();
 
     let tagsArray = [];
-    tags.map((item) => (tagsArray = tagsArray.concat(item.tags.split(' '))));
+
+    tags.map(
+      (item) =>
+        (tagsArray = tagsArray
+          .concat(item.tags.split(' '))
+          .filter((tag) => tag)),
+    );
     return Array.from(new Set(tagsArray));
   }
 
