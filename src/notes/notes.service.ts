@@ -30,8 +30,6 @@ export class NotesService {
       order: {
         order: 'ASC',
       },
-      take: take,
-      skip: skip,
     });
 
     return notes;
