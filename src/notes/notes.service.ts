@@ -23,13 +23,36 @@ export class NotesService {
   }
 
   async findAll() {
+    const notes = await this.notesRepository.find({
+      order: {
+        order: 'ASC',
+      },
+    });
+
+    return notes;
+  }
+
+  async findAllWithPagination(page: number) {
     const take = 5;
-    const page = 1;
     const skip = (page - 1) * take;
     const notes = await this.notesRepository.find({
       order: {
         order: 'ASC',
       },
+      take: take,
+      skip: skip,
+    });
+    const count = await this.notesRepository.count();
+
+    return { notes: notes, count: count };
+  }
+
+  async findLastNote() {
+    const notes = await this.notesRepository.find({
+      order: {
+        order: 'DESC',
+      },
+      take: 1,
     });
 
     return notes;
@@ -68,8 +91,13 @@ export class NotesService {
 
   async findOne(id: string) {
     const note = await this.notesRepository.findOneBy({ id });
-
     return note;
+  }
+
+  async countNotes() {
+    const count = await this.notesRepository.count();
+
+    return count;
   }
 
   async update(id: string, updateNoteDto: UpdateNoteDto) {

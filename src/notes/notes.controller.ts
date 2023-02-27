@@ -28,6 +28,16 @@ export class NotesController {
     return this.notesService.findAll();
   }
 
+  @Get('/last')
+  findLastNote() {
+    return this.notesService.findLastNote();
+  }
+
+  @Get('/page')
+  findAllWithPagination(@Query() { page }: { page: number }) {
+    return this.notesService.findAllWithPagination(page);
+  }
+
   @Get('/tags')
   findByTags(@Query() { tags }: { tags: string }) {
     return this.notesService.findByTags(tags);
